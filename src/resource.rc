@@ -33,6 +33,6 @@ BEGIN
     
     PUSHBUTTON      "Test Connection", IDC_TEST_CONNECTION, 115, 180, 80, 14, WS_TABSTOP
     
-    LTEXT           "To get your access token: In Element, go to Settings -> Help & About", 
+    LTEXT           "To get your access token: In Element, go to Settings -> Help / About", 
                     IDC_STATIC, 7, 200, 286, 16
 END
