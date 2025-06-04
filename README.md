@@ -25,7 +25,7 @@ A Foobar2000 component that sends "Now Playing" notifications to Matrix chat roo
 
 ## 🚀 Quick Start
 
-### Option 1: Complete Build (Recommended)
+### Complete Build
 
 ```batch
 # Clone and setup vcpkg (if not already installed)
