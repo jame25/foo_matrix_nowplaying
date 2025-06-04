@@ -13,15 +13,6 @@ A Foobar2000 component that sends "Now Playing" notifications to Matrix chat roo
 - 🧪 **Connection testing** - Test Matrix connectivity from preferences
 - 🌐 **Modern Matrix API** - Uses Matrix Client-Server API v3
 - 🛠️ **Multiple build approaches** - Progressive development support
-
-## 📋 Prerequisites (for building)
-
-- **Foobar2000** (32-bit version)
-- **Visual Studio 2022** with "Desktop development with C++" workload
-- **vcpkg package manager** (for dependencies)
-- **Matrix account** with:
-  - Personal access token
-  - Room ID where notifications will be sent
  
 ## 📦 Installation
 
@@ -69,6 +60,15 @@ A Foobar2000 component that sends "Now Playing" notifications to Matrix chat roo
    - Click **Apply** then **OK**
 
 ## 🚀 Quick Start
+
+## 📋 Prerequisites (for building)
+
+- **Foobar2000** (32-bit version)
+- **Visual Studio 2022** with "Desktop development with C++" workload
+- **vcpkg package manager** (for dependencies)
+- **Matrix account** with:
+  - Personal access token
+  - Room ID where notifications will be sent
 
 ### Complete Build
 
