@@ -147,11 +147,6 @@ Solution: Ensure you're building for x86 (32-bit), not x64
 
 ### Runtime Issues
 
-#### HTTP 405 Method Not Allowed ✅ FIXED
-- **Cause:** Using deprecated Matrix `/r0/` API endpoints
-- **Fix:** Updated to Matrix Client-Server API v3 (`/v3/` endpoints)
-- **Status:** Resolved in current version
-
 #### HTTP 401 Unauthorized
 - **Cause:** Invalid or expired access token
 - **Fix:** Generate new access token from Matrix client
