@@ -14,7 +14,7 @@ A Foobar2000 component that sends "Now Playing" notifications to Matrix chat roo
 - 🌐 **Modern Matrix API** - Uses Matrix Client-Server API v3
 - 🛠️ **Multiple build approaches** - Progressive development support
 
-## 📋 Prerequisites
+## 📋 Prerequisites (for building)
 
 - **Foobar2000** (32-bit version)
 - **Visual Studio 2022** with "Desktop development with C++" workload
