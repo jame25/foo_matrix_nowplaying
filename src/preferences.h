@@ -4,6 +4,7 @@
 #include "../foobar2000_SDK/foobar2000/SDK/preferences_page.h"  // Base preferences_page interface
 #include "resource.h"
 #include <string>
+#include "../foobar2000_SDK/libPPUI/DarkMode.h"
 
 // Configuration GUIDs
 extern const GUID guid_cfg_matrix_homeserver;
@@ -37,6 +38,8 @@ private:
     bool m_notify_pause_changed;
     bool m_notify_stop_changed;
     bool m_message_format_changed;
+    
+    DarkMode::CHooks m_darkMode;
     
     void update_ui();
     void apply_settings();
