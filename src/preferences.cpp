@@ -3,6 +3,10 @@
 #include "../foobar2000_SDK/foobar2000/SDK/preferences_page.h"
 #include "../foobar2000_SDK/foobar2000/SDK/foobar2000.h"
 #include <windowsx.h>
+#include <Uxtheme.h>
+#include "../foobar2000_SDK/libPPUI/DarkMode.h"
+
+#pragma comment(lib, "UxTheme.lib")
 
 // Configuration GUIDs
 const GUID guid_cfg_matrix_homeserver = { 0x87654321, 0x4321, 0x8765, { 0x43, 0x21, 0x87, 0x65, 0x43, 0x21, 0x87, 0x65 } };
@@ -27,22 +31,22 @@ cfg_string cfg_message_format(guid_cfg_message_format, "🎵 Now Playing: %artis
 static const GUID g_guid_matrix_nowplaying = 
 { 0x12345678, 0x1234, 0x5678, { 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78 } };
 
-matrix_preferences::matrix_preferences(HWND parent, preferences_page_callback::ptr callback) 
+matrix_preferences::matrix_preferences(HWND parent, preferences_page_callback::ptr callback)
     : m_hwnd(NULL), m_callback(callback),
       m_homeserver_changed(false), m_token_changed(false), m_room_id_changed(false),
-      m_enabled_changed(false), m_notify_pause_changed(false), m_notify_stop_changed(false), m_message_format_changed(false) {
+      m_enabled_changed(false), m_notify_pause_changed(false), m_notify_stop_changed(false), m_message_format_changed(false),
+      m_darkMode(DarkMode::QueryUserOption()) {
     
-    m_hwnd = CreateDialog(core_api::get_my_instance(), 
+    // Create the dialog
+    m_hwnd = CreateDialogParam(core_api::get_my_instance(), 
                          MAKEINTRESOURCE(IDD_MATRIX_PREFS), 
                          parent, 
-                         dialog_proc);
+                         dialog_proc,
+                         (LPARAM)this);
     
     if (m_hwnd) {
         ShowWindow(m_hwnd, SW_SHOW);
     }
-    
-    SetWindowLongPtr(m_hwnd, GWLP_USERDATA, (LONG_PTR)this);
-    update_ui();
 }
 
 HWND matrix_preferences::get_wnd() {
@@ -51,6 +55,7 @@ HWND matrix_preferences::get_wnd() {
 
 t_uint32 matrix_preferences::get_state() {
     t_uint32 state = preferences_state::resettable;
+    state |= preferences_state::dark_mode_supported;
     if (m_homeserver_changed || m_token_changed || m_room_id_changed || 
         m_enabled_changed || m_notify_pause_changed || m_notify_stop_changed || m_message_format_changed) {
         state |= preferences_state::changed;
@@ -78,6 +83,7 @@ void matrix_preferences::reset() {
     cfg_enabled = false;
     cfg_notify_pause = true;
     cfg_notify_stop = true;
+    cfg_message_format = "🎵 Now Playing: %artist% - %title%";
     
     update_ui();
     on_change();
@@ -98,19 +104,15 @@ void matrix_preferences::apply_settings() {
     
     GetDlgItemTextA(m_hwnd, IDC_HOMESERVER, buffer, sizeof(buffer));
     cfg_matrix_homeserver = buffer;
-    buffer[sizeof(buffer) - 1] = '\0'; // Ensure null termination
     
     GetDlgItemTextA(m_hwnd, IDC_TOKEN, buffer, sizeof(buffer));
     cfg_matrix_token = buffer;
-    buffer[sizeof(buffer) - 1] = '\0'; // Ensure null termination
     
     GetDlgItemTextA(m_hwnd, IDC_ROOM_ID, buffer, sizeof(buffer));
     cfg_matrix_room_id = buffer;
-    buffer[sizeof(buffer) - 1] = '\0'; // Ensure null termination
     
     GetDlgItemTextA(m_hwnd, IDC_MESSAGE_FORMAT, buffer, sizeof(buffer));
     cfg_message_format = buffer;
-    buffer[sizeof(buffer) - 1] = '\0'; // Ensure null termination
     
     cfg_enabled = IsDlgButtonChecked(m_hwnd, IDC_ENABLED) == BST_CHECKED;
     cfg_notify_pause = IsDlgButtonChecked(m_hwnd, IDC_NOTIFY_PAUSE) == BST_CHECKED;
@@ -128,9 +130,16 @@ INT_PTR CALLBACK matrix_preferences::dialog_proc(HWND hwnd, UINT msg, WPARAM wpa
     
     switch (msg) {
     case WM_INITDIALOG:
+        // Store the instance pointer
+        instance = (matrix_preferences*)lparam;
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)instance);
+        
+        // Initialize controls
         if (instance) {
             instance->update_ui();
         }
+        
+        // Return TRUE to let dialog manager set focus to first control
         return TRUE;
         
     case WM_COMMAND:
@@ -180,14 +189,8 @@ INT_PTR CALLBACK matrix_preferences::dialog_proc(HWND hwnd, UINT msg, WPARAM wpa
                 
             case IDC_MESSAGE_FORMAT:
                 if (HIWORD(wparam) == EN_CHANGE) {
-                    // Check if the content has actually changed to avoid unnecessary saves
-                    char buffer[1024];
-                    GetDlgItemTextA(instance->m_hwnd, IDC_MESSAGE_FORMAT, buffer, sizeof(buffer));
-                    buffer[sizeof(buffer) - 1] = '\0'; // Ensure null termination
-                    if (cfg_message_format.get_ptr() != std::string(buffer)) {
-                        instance->m_message_format_changed = true;
-                        instance->on_change();
-                    }
+                    instance->m_message_format_changed = true;
+                    instance->on_change();
                 }
                 break;
                 
@@ -206,7 +209,7 @@ INT_PTR CALLBACK matrix_preferences::dialog_proc(HWND hwnd, UINT msg, WPARAM wpa
                         
                         // Optionally send a test message
                         if (cfg_matrix_room_id.get_length() > 0) {
-                            test_client.send_message("🎵 <em>Foobar2000 Matrix component connected!</em>");
+                            test_client.send_message("🎵 Foobar2000 Matrix component connected!");
                         }
                     } else {
                         MessageBoxA(hwnd, "Connection failed! Please check your settings.", "Matrix Connection Test", MB_OK | MB_ICONERROR);
@@ -230,5 +233,7 @@ GUID matrix_preferences_page::get_guid() {
 }
 
 GUID matrix_preferences_page::get_parent_guid() {
-    return preferences_page::guid_root;
+    return preferences_page::guid_tools;
 }
+
+// Factory registration is in main.cpp
