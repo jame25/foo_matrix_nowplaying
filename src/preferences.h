@@ -42,6 +42,7 @@ private:
     DarkMode::CHooks m_darkMode;
     
     void update_ui();
+    void update_ui_with_hwnd(HWND hwnd);
     void apply_settings();
     void on_change();
     
