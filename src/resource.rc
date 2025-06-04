@@ -1,0 +1,26 @@
+#include <windows.h>
+#include "resource.h"
+
+IDC_DUMMY RCDATA
+BEGIN
+    "This is a dummy resource"
+END
+
+IDD_MATRIX_PREFS DIALOGEX 0, 0, 250, 150
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Matrix Now Playing Preferences"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    CONTROL "Enable Matrix Notifications", IDC_ENABLED, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 10, 10, 150, 10
+    LTEXT           "Homeserver URL:", IDC_STATIC, 10, 30, 80, 10
+    EDITTEXT        IDC_HOMESERVER, 100, 27, 140, 14, ES_AUTOHSCROLL
+    LTEXT           "Access Token:", IDC_STATIC, 10, 50, 80, 10
+    EDITTEXT        IDC_TOKEN, 100, 47, 140, 14, ES_AUTOHSCROLL
+    LTEXT           "Room ID:", IDC_STATIC, 10, 70, 80, 10
+    EDITTEXT        IDC_ROOM_ID, 100, 67, 140, 14, ES_AUTOHSCROLL
+    CONTROL "Notify on Pause", IDC_NOTIFY_PAUSE, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 10, 90, 150, 10
+    CONTROL "Notify on Stop", IDC_NOTIFY_STOP, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 10, 110, 150, 10
+    LTEXT           "Message Format:", IDC_STATIC, 10, 130, 80, 10
+    EDITTEXT        IDC_MESSAGE_FORMAT, 100, 127, 140, 14, ES_AUTOHSCROLL
+    PUSHBUTTON      "Test Connection", IDC_TEST_CONNECTION, 80, 150, 90, 14
+END
