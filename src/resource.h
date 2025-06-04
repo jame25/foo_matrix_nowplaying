@@ -20,7 +20,7 @@
 #define IDC_FORMAT_HELP                 1011
 #define IDC_NOTIFY_PAUSE                1012
 #define IDC_NOTIFY_STOP                 1013
-#define IDC_MESSAGE_FORMAT              1006
+#define IDC_MESSAGE_FORMAT              1014
 
 // Next default values for new objects
 #ifdef APSTUDIO_INVOKED
