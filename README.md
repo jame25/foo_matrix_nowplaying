@@ -79,9 +79,9 @@ cmake --build . --config Release
 
 ## 📦 Installation
 
-1. **Copy the DLL:**
+1. **Install the foo_matrix_nowplaying.fb2k-component:**
    ```
-   Copy output/foo_matrix_nowplaying.dll → foobar2000/components/
+   Download and install the file available in releases: foo_matrix_nowplaying.fb2k-component 
    ```
 
 2. **Restart Foobar2000**
