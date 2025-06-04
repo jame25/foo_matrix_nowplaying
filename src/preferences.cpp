@@ -64,6 +64,7 @@ t_uint32 matrix_preferences::get_state() {
 }
 
 void matrix_preferences::apply() {
+    console::print("Matrix preferences: Applying settings...");
     apply_settings();
     
     // Reset change flags
@@ -74,13 +75,14 @@ void matrix_preferences::apply() {
     m_notify_pause_changed = false;
     m_notify_stop_changed = false;
     m_message_format_changed = false;
+    console::print("Matrix preferences: Settings applied successfully");
 }
 
 void matrix_preferences::reset() {
     cfg_matrix_homeserver = "https://matrix.org";
     cfg_matrix_token = "";
     cfg_matrix_room_id = "";
-    cfg_enabled = false;
+    cfg_enabled = true;
     cfg_notify_pause = true;
     cfg_notify_stop = true;
     cfg_message_format = "🎵 Now Playing: %artist% - %title%";
@@ -90,25 +92,45 @@ void matrix_preferences::reset() {
 }
 
 void matrix_preferences::update_ui() {
-    SetDlgItemTextA(m_hwnd, IDC_HOMESERVER, cfg_matrix_homeserver.get_ptr());
-    SetDlgItemTextA(m_hwnd, IDC_TOKEN, cfg_matrix_token.get_ptr());
-    SetDlgItemTextA(m_hwnd, IDC_ROOM_ID, cfg_matrix_room_id.get_ptr());
-    CheckDlgButton(m_hwnd, IDC_ENABLED, cfg_enabled ? BST_CHECKED : BST_UNCHECKED);
-    CheckDlgButton(m_hwnd, IDC_NOTIFY_PAUSE, cfg_notify_pause ? BST_CHECKED : BST_UNCHECKED);
-    CheckDlgButton(m_hwnd, IDC_NOTIFY_STOP, cfg_notify_stop ? BST_CHECKED : BST_UNCHECKED);
-    SetDlgItemTextA(m_hwnd, IDC_MESSAGE_FORMAT, cfg_message_format.get_ptr());
+    update_ui_with_hwnd(m_hwnd);
+}
+
+void matrix_preferences::update_ui_with_hwnd(HWND hwnd) {
+    console::printf("Matrix: Loading homeserver: %s", cfg_matrix_homeserver.get_ptr());
+    const char* token = cfg_matrix_token.get_ptr();
+    console::printf("Matrix: Loading token: %s", token && strlen(token) > 0 ? "***MASKED***" : "(empty)");
+    console::printf("Matrix: Loading room ID: %s", cfg_matrix_room_id.get_ptr());
+    
+    console::printf("Matrix: HWND is %s", hwnd ? "valid" : "NULL");
+    
+    BOOL result1 = SetDlgItemTextA(hwnd, IDC_HOMESERVER, cfg_matrix_homeserver.get_ptr());
+    console::printf("Matrix: SetDlgItemTextA homeserver result: %d", result1);
+    
+    BOOL result2 = SetDlgItemTextA(hwnd, IDC_TOKEN, cfg_matrix_token.get_ptr());
+    console::printf("Matrix: SetDlgItemTextA token result: %d", result2);
+    
+    BOOL result3 = SetDlgItemTextA(hwnd, IDC_ROOM_ID, cfg_matrix_room_id.get_ptr());
+    console::printf("Matrix: SetDlgItemTextA room ID result: %d", result3);
+    
+    CheckDlgButton(hwnd, IDC_ENABLED, cfg_enabled ? BST_CHECKED : BST_UNCHECKED);
+    CheckDlgButton(hwnd, IDC_NOTIFY_PAUSE, cfg_notify_pause ? BST_CHECKED : BST_UNCHECKED);
+    CheckDlgButton(hwnd, IDC_NOTIFY_STOP, cfg_notify_stop ? BST_CHECKED : BST_UNCHECKED);
+    SetDlgItemTextA(hwnd, IDC_MESSAGE_FORMAT, cfg_message_format.get_ptr());
 }
 
 void matrix_preferences::apply_settings() {
     char buffer[1024];
     
     GetDlgItemTextA(m_hwnd, IDC_HOMESERVER, buffer, sizeof(buffer));
+    console::printf("Matrix: Setting homeserver to: %s", buffer);
     cfg_matrix_homeserver = buffer;
     
     GetDlgItemTextA(m_hwnd, IDC_TOKEN, buffer, sizeof(buffer));
+    console::printf("Matrix: Setting token to: %s", strlen(buffer) > 0 ? "***MASKED***" : "(empty)");
     cfg_matrix_token = buffer;
     
     GetDlgItemTextA(m_hwnd, IDC_ROOM_ID, buffer, sizeof(buffer));
+    console::printf("Matrix: Setting room ID to: %s", buffer);
     cfg_matrix_room_id = buffer;
     
     GetDlgItemTextA(m_hwnd, IDC_MESSAGE_FORMAT, buffer, sizeof(buffer));
@@ -136,7 +158,7 @@ INT_PTR CALLBACK matrix_preferences::dialog_proc(HWND hwnd, UINT msg, WPARAM wpa
         
         // Initialize controls
         if (instance) {
-            instance->update_ui();
+            instance->update_ui_with_hwnd(hwnd);
         }
         
         // Return TRUE to let dialog manager set focus to first control
