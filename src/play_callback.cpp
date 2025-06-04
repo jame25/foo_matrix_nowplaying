@@ -3,10 +3,7 @@
 #include "simple_matrix_client.h"
 #include <sstream>
 
-extern cfg_bool cfg_enabled;
-extern cfg_bool cfg_notify_pause;
-extern cfg_bool cfg_notify_stop;
-extern cfg_string cfg_message_format;
+// Config variables are declared in preferences.h
 
 play_callback_matrix::play_callback_matrix() : m_running(false) {
     // Don't start thread in constructor - defer until first use
