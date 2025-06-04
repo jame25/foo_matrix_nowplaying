@@ -171,31 +171,6 @@ Solution: Ensure you're building for x86 (32-bit), not x64
 3. Test connection using the "Test Connection" button
 4. Verify room permissions and access token validity
 
-## 📁 Project Structure
-
-```
-foo_matrix_nowplaying/
-├── 📄 README.md                    # This file
-├── 📄 SOLUTION_SUMMARY.md          # Development approach guide
-├── 📄 HTTP_405_FIX_GUIDE.md        # API fixes documentation
-├── 🔧 CMakeLists.txt               # CMake configuration
-├── 🔧 foo_matrix_nowplaying.vcxproj # Visual Studio project
-├── 📁 src/                         # Source code
-│   ├── 🎯 main.cpp                 # Component entry point
-│   ├── 🌐 matrix_client.cpp/.h     # Matrix API client (v3 endpoints)
-│   ├── 🎵 play_callback.cpp/.h     # Playback event handling
-│   ├── ⚙️ preferences.cpp          # Settings UI implementation
-│   ├── 🔧 simple_matrix_client.h   # Simplified client interface
-│   └── 📋 working_minimal.cpp      # Minimal working component
-├── 📁 build_scripts/               # Build automation
-│   ├── 🚀 build-matrix-complete.bat # Complete build (recommended)
-│   ├── 🔧 build-working-minimal.bat # Minimal build for testing
-│   └── 📦 build.bat                # Legacy build script
-├── 📁 foobar2000_SDK/             # Foobar2000 SDK (external)
-├── 📁 vcpkg_installed/            # vcpkg dependencies
-└── 📁 output/                     # Build output directory
-```
-
 ## 🛠️ Development Notes
 
 ### Architecture
