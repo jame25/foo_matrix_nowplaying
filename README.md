@@ -79,7 +79,7 @@ cmake --build . --config Release
 
 ## 📦 Installation
 
-1. **Install the foo_matrix_nowplaying.fb2k-component:**
+1. **Install foo_matrix_nowplaying.fb2k-component:**
    ```
    Download and install the file available in releases: foo_matrix_nowplaying.fb2k-component 
    ```
