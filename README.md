@@ -22,6 +22,51 @@ A Foobar2000 component that sends "Now Playing" notifications to Matrix chat roo
 - **Matrix account** with:
   - Personal access token
   - Room ID where notifications will be sent
+ 
+## 📦 Installation
+
+1. **Install foo_matrix_nowplaying.fb2k-component:**
+   ```
+   Download and install the file available in releases: foo_matrix_nowplaying.fb2k-component 
+   ```
+
+2. **Restart Foobar2000**
+
+3. **Verify installation:**
+   - Check **View → Console** for: `"Matrix Now Playing: Component loaded successfully"`
+   - Navigate to **File → Preferences → Tools → Matrix Now Playing**
+
+## ⚙️ Configuration
+
+### Getting Matrix Credentials
+
+#### Access Token
+- **Element Web/Desktop:** Settings → Help & About → Advanced → Access Token
+- **Element Mobile:** Settings → Help & About → Advanced → Access Token
+- Copy the entire token string (starts with `syt_` or similar)
+
+#### Room ID
+- **Element:** Room Settings → Advanced → Internal room ID
+- Format: `!abc123xyz:matrix.org`
+- **Alternative:** Use Matrix room alias like `#room:matrix.org`
+
+### Component Setup
+
+1. **Open Preferences:**
+   - File → Preferences → Tools → Matrix Now Playing
+
+2. **Configure Settings:**
+   - **Homeserver URL:** Your Matrix server (e.g., `https://matrix.org`)
+   - **Access Token:** Your personal access token
+   - **Room ID:** Target room for notifications
+   - **Enable notifications:** Check desired notification types
+
+3. **Test Configuration:**
+   - Click **"Test Connection"** button
+   - Check console for success/error messages
+
+4. **Apply Settings:**
+   - Click **Apply** then **OK**
 
 ## 🚀 Quick Start
 
@@ -76,51 +121,6 @@ cd build
 cmake -G "Visual Studio 17 2022" -A Win32 ..
 cmake --build . --config Release
 ```
-
-## 📦 Installation
-
-1. **Install foo_matrix_nowplaying.fb2k-component:**
-   ```
-   Download and install the file available in releases: foo_matrix_nowplaying.fb2k-component 
-   ```
-
-2. **Restart Foobar2000**
-
-3. **Verify installation:**
-   - Check **View → Console** for: `"Matrix Now Playing: Component loaded successfully"`
-   - Navigate to **File → Preferences → Tools → Matrix Now Playing**
-
-## ⚙️ Configuration
-
-### Getting Matrix Credentials
-
-#### Access Token
-- **Element Web/Desktop:** Settings → Help & About → Advanced → Access Token
-- **Element Mobile:** Settings → Help & About → Advanced → Access Token
-- Copy the entire token string (starts with `syt_` or similar)
-
-#### Room ID
-- **Element:** Room Settings → Advanced → Internal room ID
-- Format: `!abc123xyz:matrix.org`
-- **Alternative:** Use Matrix room alias like `#room:matrix.org`
-
-### Component Setup
-
-1. **Open Preferences:**
-   - File → Preferences → Tools → Matrix Now Playing
-
-2. **Configure Settings:**
-   - **Homeserver URL:** Your Matrix server (e.g., `https://matrix.org`)
-   - **Access Token:** Your personal access token
-   - **Room ID:** Target room for notifications
-   - **Enable notifications:** Check desired notification types
-
-3. **Test Configuration:**
-   - Click **"Test Connection"** button
-   - Check console for success/error messages
-
-4. **Apply Settings:**
-   - Click **Apply** then **OK**
 
 ## 🔍 Troubleshooting
 
