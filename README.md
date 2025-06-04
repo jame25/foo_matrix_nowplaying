@@ -38,18 +38,6 @@ cd vcpkg
 build-simple-matrix.bat
 ```
 
-### Option 2: Progressive Development
-
-If you encounter build issues, use the progressive approach:
-
-```batch
-# Start with minimal working component
-build-working-minimal.bat
-
-# Once working, build complete version
-build-matrix-complete.bat
-```
-
 ## 🔧 Building from Source
 
 ### Method 1: Automated Build Script
