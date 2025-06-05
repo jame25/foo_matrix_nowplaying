@@ -28,7 +28,7 @@ std::string simple_matrix_client::generate_txn_id() {
     return "fb2k_" + std::to_string(ms);
 }
 
-std::string simple_matrix_client::create_json_message(const std::string& message) {
+std::string simple_matrix_client::create_json_message(const std::string& message, bool as_emote) {
     // Simple JSON creation without external library
     std::string escaped_message = message;
     
@@ -45,7 +45,7 @@ std::string simple_matrix_client::create_json_message(const std::string& message
     
     std::stringstream json;
     json << "{";
-    json << "\"msgtype\":\"m.text\",";
+    json << "\"msgtype\":\"" << (as_emote ? "m.emote" : "m.text") << "\",";
     json << "\"body\":\"" << escaped_message << "\",";
     json << "\"format\":\"org.matrix.custom.html\",";
     json << "\"formatted_body\":\"" << escaped_message << "\"";
@@ -159,7 +159,7 @@ bool simple_matrix_client::send_http_request(const std::string& url, const std::
     }
 }
 
-bool simple_matrix_client::send_message(const std::string& message) {
+bool simple_matrix_client::send_message(const std::string& message, bool as_emote) {
     if (m_token.empty() || m_room_id.empty()) {
         return false;
     }
@@ -167,9 +167,13 @@ bool simple_matrix_client::send_message(const std::string& message) {
     std::string txn_id = generate_txn_id();
     std::string encoded_room_id = url_encode(m_room_id);
     std::string url = m_homeserver + "/_matrix/client/v3/rooms/" + encoded_room_id + "/send/m.room.message/" + txn_id;
-    std::string json_data = create_json_message(message);
+    std::string json_data = create_json_message(message, as_emote);
     
     return send_http_request(url, "PUT", json_data, "");
+}
+
+bool simple_matrix_client::send_emote(const std::string& action) {
+    return send_message(action, true);
 }
 
 bool simple_matrix_client::test_connection() {
