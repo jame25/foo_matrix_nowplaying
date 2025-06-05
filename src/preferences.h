@@ -14,6 +14,7 @@ extern const GUID guid_cfg_enabled;
 extern const GUID guid_cfg_notify_pause;
 extern const GUID guid_cfg_notify_stop;
 extern const GUID guid_cfg_message_format;
+extern const GUID guid_cfg_send_as_action;
 extern const GUID guid_matrix_preferences_page;
 
 // Configuration variables
@@ -24,6 +25,7 @@ extern cfg_bool cfg_enabled;
 extern cfg_bool cfg_notify_pause;
 extern cfg_bool cfg_notify_stop;
 extern cfg_string cfg_message_format;
+extern cfg_bool cfg_send_as_action;
 
 // Preferences page
 class matrix_preferences : public preferences_page_instance {
@@ -38,6 +40,7 @@ private:
     bool m_notify_pause_changed;
     bool m_notify_stop_changed;
     bool m_message_format_changed;
+    bool m_send_as_action_changed;
     
     DarkMode::CHooks m_darkMode;
     
