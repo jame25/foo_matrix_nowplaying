@@ -21,6 +21,7 @@
 #define IDC_NOTIFY_PAUSE                1012
 #define IDC_NOTIFY_STOP                 1013
 #define IDC_MESSAGE_FORMAT              1014
+#define IDC_SEND_AS_ACTION              1015
 
 // Next default values for new objects
 #ifdef APSTUDIO_INVOKED
