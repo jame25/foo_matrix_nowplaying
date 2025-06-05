@@ -16,6 +16,7 @@ const GUID guid_cfg_enabled = { 0x12121212, 0x3434, 0x5656, { 0x78, 0x78, 0x90, 
 const GUID guid_cfg_notify_pause = { 0x56565656, 0x7878, 0x9090, { 0xAB, 0xAB, 0xCD, 0xCD, 0xEF, 0xEF, 0x01, 0x01 } };
 const GUID guid_cfg_notify_stop = { 0x78787878, 0x9090, 0xABAB, { 0xCD, 0xCD, 0xEF, 0xEF, 0x01, 0x01, 0x23, 0x23 } };
 const GUID guid_cfg_message_format = { 0x90909090, 0xABAB, 0xCDCD, { 0xEF, 0xEF, 0x01, 0x01, 0x23, 0x23, 0x45, 0x45 } };
+const GUID guid_cfg_send_as_action = { 0xABCDEF01, 0x2345, 0x6789, { 0xAB, 0xCD, 0xEF, 0x01, 0x23, 0x45, 0x67, 0x89 } };
 const GUID guid_matrix_preferences_page = { 0x12345678, 0x1234, 0x1234, { 0x12, 0x34, 0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc } };
 
 // Configuration variables
@@ -26,6 +27,7 @@ cfg_bool cfg_enabled(guid_cfg_enabled, true);
 cfg_bool cfg_notify_pause(guid_cfg_notify_pause, true);
 cfg_bool cfg_notify_stop(guid_cfg_notify_stop, true);
 cfg_string cfg_message_format(guid_cfg_message_format, "🎵 Now Playing: %artist% - %title%");
+cfg_bool cfg_send_as_action(guid_cfg_send_as_action, false);
 
 // Component GUID
 static const GUID g_guid_matrix_nowplaying = 
@@ -34,7 +36,7 @@ static const GUID g_guid_matrix_nowplaying =
 matrix_preferences::matrix_preferences(HWND parent, preferences_page_callback::ptr callback)
     : m_hwnd(NULL), m_callback(callback),
       m_homeserver_changed(false), m_token_changed(false), m_room_id_changed(false),
-      m_enabled_changed(false), m_notify_pause_changed(false), m_notify_stop_changed(false), m_message_format_changed(false),
+      m_enabled_changed(false), m_notify_pause_changed(false), m_notify_stop_changed(false), m_message_format_changed(false), m_send_as_action_changed(false),
       m_darkMode(DarkMode::QueryUserOption()) {
     
     // Create the dialog
@@ -57,7 +59,7 @@ t_uint32 matrix_preferences::get_state() {
     t_uint32 state = preferences_state::resettable;
     state |= preferences_state::dark_mode_supported;
     if (m_homeserver_changed || m_token_changed || m_room_id_changed || 
-        m_enabled_changed || m_notify_pause_changed || m_notify_stop_changed || m_message_format_changed) {
+        m_enabled_changed || m_notify_pause_changed || m_notify_stop_changed || m_message_format_changed || m_send_as_action_changed) {
         state |= preferences_state::changed;
     }
     return state;
@@ -75,6 +77,7 @@ void matrix_preferences::apply() {
     m_notify_pause_changed = false;
     m_notify_stop_changed = false;
     m_message_format_changed = false;
+    m_send_as_action_changed = false;
     console::print("Matrix preferences: Settings applied successfully");
 }
 
@@ -86,6 +89,7 @@ void matrix_preferences::reset() {
     cfg_notify_pause = true;
     cfg_notify_stop = true;
     cfg_message_format = "🎵 Now Playing: %artist% - %title%";
+    cfg_send_as_action = false;
     
     update_ui();
     on_change();
@@ -115,6 +119,7 @@ void matrix_preferences::update_ui_with_hwnd(HWND hwnd) {
     CheckDlgButton(hwnd, IDC_ENABLED, cfg_enabled ? BST_CHECKED : BST_UNCHECKED);
     CheckDlgButton(hwnd, IDC_NOTIFY_PAUSE, cfg_notify_pause ? BST_CHECKED : BST_UNCHECKED);
     CheckDlgButton(hwnd, IDC_NOTIFY_STOP, cfg_notify_stop ? BST_CHECKED : BST_UNCHECKED);
+    CheckDlgButton(hwnd, IDC_SEND_AS_ACTION, cfg_send_as_action ? BST_CHECKED : BST_UNCHECKED);
     SetDlgItemTextA(hwnd, IDC_MESSAGE_FORMAT, cfg_message_format.get_ptr());
 }
 
@@ -139,6 +144,7 @@ void matrix_preferences::apply_settings() {
     cfg_enabled = IsDlgButtonChecked(m_hwnd, IDC_ENABLED) == BST_CHECKED;
     cfg_notify_pause = IsDlgButtonChecked(m_hwnd, IDC_NOTIFY_PAUSE) == BST_CHECKED;
     cfg_notify_stop = IsDlgButtonChecked(m_hwnd, IDC_NOTIFY_STOP) == BST_CHECKED;
+    cfg_send_as_action = IsDlgButtonChecked(m_hwnd, IDC_SEND_AS_ACTION) == BST_CHECKED;
 }
 
 void matrix_preferences::on_change() {
@@ -216,6 +222,13 @@ INT_PTR CALLBACK matrix_preferences::dialog_proc(HWND hwnd, UINT msg, WPARAM wpa
                 }
                 break;
                 
+            case IDC_SEND_AS_ACTION:
+                if (HIWORD(wparam) == BN_CLICKED) {
+                    instance->m_send_as_action_changed = true;
+                    instance->on_change();
+                }
+                break;
+                
             case IDC_TEST_CONNECTION:
                 if (HIWORD(wparam) == BN_CLICKED) {
                     // Test connection
@@ -231,7 +244,7 @@ INT_PTR CALLBACK matrix_preferences::dialog_proc(HWND hwnd, UINT msg, WPARAM wpa
                         
                         // Optionally send a test message
                         if (cfg_matrix_room_id.get_length() > 0) {
-                            test_client.send_message("🎵 Foobar2000 Matrix component connected!");
+                            test_client.send_message("🎵 Foobar2000 Matrix component connected!", cfg_send_as_action);
                         }
                     } else {
                         MessageBoxA(hwnd, "Connection failed! Please check your settings.", "Matrix Connection Test", MB_OK | MB_ICONERROR);
