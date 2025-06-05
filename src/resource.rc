@@ -1,7 +1,7 @@
 #include <windows.h>
 #include "resource.h"
 
-IDD_MATRIX_PREFS DIALOGEX 0, 0, 300, 220
+IDD_MATRIX_PREFS DIALOGEX 0, 0, 300, 235
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE | DS_CONTROL
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
@@ -20,7 +20,7 @@ BEGIN
     LTEXT           "Room ID:", IDC_STATIC, 15, 71, 70, 8
     EDITTEXT        IDC_ROOM_ID, 90, 69, 195, 14, ES_AUTOHSCROLL | WS_TABSTOP
     
-    GROUPBOX        "Notification Options", IDC_STATIC, 7, 107, 286, 65
+    GROUPBOX        "Notification Options", IDC_STATIC, 7, 107, 286, 80
     
     CONTROL         "Notify on pause/resume", IDC_NOTIFY_PAUSE, "Button", 
                     BS_AUTOCHECKBOX | WS_TABSTOP, 15, 122, 150, 10
@@ -28,11 +28,14 @@ BEGIN
     CONTROL         "Notify on stop", IDC_NOTIFY_STOP, "Button", 
                     BS_AUTOCHECKBOX | WS_TABSTOP, 15, 137, 150, 10
     
-    LTEXT           "Message Format:", IDC_STATIC, 15, 154, 70, 8
-    EDITTEXT        IDC_MESSAGE_FORMAT, 90, 152, 195, 14, ES_AUTOHSCROLL | WS_TABSTOP
+    CONTROL         "Send as action message (/me)", IDC_SEND_AS_ACTION, "Button", 
+                    BS_AUTOCHECKBOX | WS_TABSTOP, 15, 152, 150, 10
     
-    PUSHBUTTON      "Test Connection", IDC_TEST_CONNECTION, 115, 180, 80, 14, WS_TABSTOP
+    LTEXT           "Message Format:", IDC_STATIC, 15, 167, 70, 8
+    EDITTEXT        IDC_MESSAGE_FORMAT, 90, 165, 195, 14, ES_AUTOHSCROLL | WS_TABSTOP
+    
+    PUSHBUTTON      "Test Connection", IDC_TEST_CONNECTION, 115, 195, 80, 14, WS_TABSTOP
     
     LTEXT           "To get your access token: In Element, go to Settings -> Help / About", 
-                    IDC_STATIC, 7, 200, 286, 16
+                    IDC_STATIC, 7, 215, 286, 16
 END
