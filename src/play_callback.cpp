@@ -46,7 +46,7 @@ void play_callback_matrix::worker_thread() {
             
             // Retry logic
             for (int retry = 0; retry < 3; retry++) {
-                if (m_client.send_message(message)) {
+                if (m_client.send_message(message, cfg_send_as_action)) {
                     break;
                 }
                 if (retry < 2) {
