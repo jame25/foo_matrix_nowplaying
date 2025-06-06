@@ -24,7 +24,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 // Component version declaration using the proper SDK macro
 DECLARE_COMPONENT_VERSION(
     "Matrix Now Playing",
-    "1.0.2",
+    "1.0.3",
     "Sends Now Playing notifications to Matrix chat.\n"
     "Configure your Matrix homeserver, access token, and room ID in preferences.\n\n"
     "Author: jame25\n"
