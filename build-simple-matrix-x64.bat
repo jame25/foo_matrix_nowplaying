@@ -58,6 +58,19 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
+echo Compiling announce_hotkey.cpp...
+cl.exe /nologo /c /MD /O2 /W3 /EHsc /std:c++17 ^
+    /D_WINDOWS /DWIN32 /D_WIN64 /D_USRDLL /DNDEBUG /DUNICODE /D_UNICODE ^
+    %INCLUDES% ^
+    /Fo"output_x64\announce_hotkey.obj" ^
+    "src\announce_hotkey.cpp"
+
+if %ERRORLEVEL% NEQ 0 (
+    echo ERROR: announce_hotkey.cpp compilation failed
+    pause
+    exit /b 1
+)
+
 echo Compiling play_callback.cpp...
 cl.exe /nologo /c /MD /O2 /W3 /EHsc /std:c++17 ^
     /D_WINDOWS /DWIN32 /D_WIN64 /D_USRDLL /DNDEBUG /DUNICODE /D_UNICODE ^
@@ -121,6 +134,7 @@ link.exe /nologo /DLL /LTCG /MACHINE:X64 ^
     /LIBPATH:"%SDK_ROOT%\foobar2000\shared\x64\Release" ^
     "output_x64\main.obj" ^
     "output_x64\simple_matrix_client.obj" ^
+    "output_x64\announce_hotkey.obj" ^
     "output_x64\play_callback.obj" ^
     "output_x64\preferences.obj" ^
     "output_x64\darkmode_stub.obj" ^
