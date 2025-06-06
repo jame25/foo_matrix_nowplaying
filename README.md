@@ -1,67 +1,23 @@
-# Foobar2000 Matrix "Now Playing" Component
+# Foobar2000 Matrix Now Playing Component
 
 A Foobar2000 component that sends "Now Playing" notifications to Matrix chat rooms with real-time track updates.
 
 ## ✨ Features
 
 - 🎵 **Real-time track notifications** - Sends track information when songs change
+- ⚡ **Manual track announcements** - Hotkey support to announce current track on-demand
 - ⏸️ **Playback state updates** - Optional pause/resume notifications  
 - ⏹️ **Stop notifications** - Optional stop event notifications
+- 🎨 **Customizable formatting** - Configure message templates with track variables
+- 💬 **Action message support** - Send messages as Matrix actions (/me commands)
 - 🔐 **Secure Matrix integration** - Uses Matrix access tokens for authentication
 - ⚡ **Asynchronous messaging** - Non-blocking message sending
 - 🔄 **Automatic retry logic** - Handles failed messages gracefully
 - 🧪 **Connection testing** - Test Matrix connectivity from preferences
 - 🌐 **Modern Matrix API** - Uses Matrix Client-Server API v3
 - 🛠️ **Multiple build approaches** - Progressive development support
- 
-## 📦 Installation
 
-1. **Install foo_matrix_nowplaying.fb2k-component:**
-   ```
-   Download and install the file available in releases: foo_matrix_nowplaying.fb2k-component 
-   ```
-
-2. **Restart Foobar2000**
-
-3. **Verify installation:**
-   - Check **View → Console** for: `"Matrix Now Playing: Component loaded successfully"`
-   - Navigate to **File → Preferences → Tools → Matrix Now Playing**
-
-## ⚙️ Configuration
-
-### Getting Matrix Credentials
-
-#### Access Token
-- **Element Web/Desktop:** Settings → Help & About → Advanced → Access Token
-- **Element Mobile:** Settings → Help & About → Advanced → Access Token
-- Copy the entire token string (starts with `syt_` or similar)
-
-#### Room ID
-- **Element:** Room Settings → Advanced → Internal room ID
-- Format: `!abc123xyz:matrix.org`
-- **Alternative:** Use Matrix room alias like `#room:matrix.org`
-
-### Component Setup
-
-1. **Open Preferences:**
-   - File → Preferences → Tools → Matrix Now Playing
-
-2. **Configure Settings:**
-   - **Homeserver URL:** Your Matrix server (e.g., `https://matrix.org`)
-   - **Access Token:** Your personal access token
-   - **Room ID:** Target room for notifications
-   - **Enable notifications:** Check desired notification types
-
-3. **Test Configuration:**
-   - Click **"Test Connection"** button
-   - Check console for success/error messages
-
-4. **Apply Settings:**
-   - Click **Apply** then **OK**
-
-## 🚀 Quick Start
-
-## 📋 Prerequisites (for building)
+## 📋 Prerequisites
 
 - **Foobar2000** (32-bit version)
 - **Visual Studio 2022** with "Desktop development with C++" workload
@@ -70,7 +26,9 @@ A Foobar2000 component that sends "Now Playing" notifications to Matrix chat roo
   - Personal access token
   - Room ID where notifications will be sent
 
-### Complete Build
+## 🚀 Quick Start
+
+### Option 1: Complete Build (Recommended)
 
 ```batch
 # Clone and setup vcpkg (if not already installed)
@@ -80,7 +38,19 @@ cd vcpkg
 ./vcpkg integrate install
 
 # Build the complete component
-build-simple-matrix.bat
+build-matrix-complete.bat
+```
+
+### Option 2: Progressive Development
+
+If you encounter build issues, use the progressive approach:
+
+```batch
+# Start with minimal working component
+build-working-minimal.bat
+
+# Once working, build complete version
+build-matrix-complete.bat
 ```
 
 ## 🔧 Building from Source
@@ -122,6 +92,76 @@ cmake -G "Visual Studio 17 2022" -A Win32 ..
 cmake --build . --config Release
 ```
 
+## 📦 Installation
+
+1. **Copy the DLL:**
+   ```
+   Copy output/foo_matrix_nowplaying.dll → foobar2000/components/
+   ```
+
+2. **Restart Foobar2000**
+
+3. **Verify installation:**
+   - Check **View → Console** for: `"Matrix Now Playing: Component loaded successfully"`
+   - Navigate to **File → Preferences → Tools → Matrix Now Playing**
+
+## ⚙️ Configuration
+
+### Getting Matrix Credentials
+
+#### Access Token
+- **Element Web/Desktop:** Settings → Help & About → Advanced → Access Token
+- **Element Mobile:** Settings → Help & About → Advanced → Access Token
+- Copy the entire token string (starts with `syt_` or similar)
+
+#### Room ID
+- **Element:** Room Settings → Advanced → Internal room ID
+- Format: `!abc123xyz:matrix.org`
+- **Alternative:** Use Matrix room alias like `#room:matrix.org`
+
+### Component Setup
+
+1. **Open Preferences:**
+   - File → Preferences → Tools → Matrix Now Playing
+
+2. **Configure Settings:**
+   - **Homeserver URL:** Your Matrix server (e.g., `https://matrix.org`)
+   - **Access Token:** Your personal access token
+   - **Room ID:** Target room for notifications
+   - **Enable notifications:** Check desired notification types
+   - **Message Format:** Customize the track announcement template (e.g., `🎵 %artist% - %title% [%album%]`)
+   - **Send as action message:** Enable to send messages as Matrix actions (/me commands)
+
+3. **Test Configuration:**
+   - Click **"Test Connection"** button
+   - Check console for success/error messages
+
+4. **Apply Settings:**
+   - Click **Apply** then **OK**
+
+### Hotkey Configuration
+
+1. **Open Keyboard Shortcuts:**
+   - File → Preferences → General → Keyboard Shortcuts
+
+2. **Find the Command:**
+   - In the "Available actions" list, look for `Matrix Now Playing` group
+   - Expand it and find `Announce current track to Matrix`
+
+3. **Assign Hotkey:**
+   - Select the command
+   - Click in the "Key" field and press your desired key combination (e.g., `Ctrl+Shift+M`)
+   - Click `OK`
+
+4. **Usage:**
+   - Press your configured hotkey while a track is playing
+   - The current track will be announced to your Matrix room using the same format and settings as automatic notifications
+   - **Note:** The hotkey respects all your configuration settings including message format and action message preference
+
+### Alternative Menu Access
+The announce command is also available through the main menu:
+- **Playback** → **Matrix Now Playing** → **Announce current track to Matrix**
+
 ## 🔍 Troubleshooting
 
 ### Build Issues
@@ -147,6 +187,11 @@ Solution: Ensure you're building for x86 (32-bit), not x64
 
 ### Runtime Issues
 
+#### HTTP 405 Method Not Allowed ✅ FIXED
+- **Cause:** Using deprecated Matrix `/r0/` API endpoints
+- **Fix:** Updated to Matrix Client-Server API v3 (`/v3/` endpoints)
+- **Status:** Resolved in current version
+
 #### HTTP 401 Unauthorized
 - **Cause:** Invalid or expired access token
 - **Fix:** Generate new access token from Matrix client
@@ -166,6 +211,29 @@ Solution: Ensure you're building for x86 (32-bit), not x64
 3. Test connection using the "Test Connection" button
 4. Verify room permissions and access token validity
 
+## 📁 Project Structure
+
+```
+foo_matrix_nowplaying/
+├── 📄 README.md                    # This file
+├── 🔧 CMakeLists.txt               # CMake configuration
+├── 🔧 foo_matrix_nowplaying.vcxproj # Visual Studio project
+├── 📁 src/                         # Source code
+│   ├── 🎯 main.cpp                 # Component entry point
+│   ├── 🌐 simple_matrix_client.cpp/.h # Matrix API client (v3 endpoints)
+│   ├── 🎵 play_callback.cpp/.h     # Playback event handling
+│   ├── ⚡ announce_hotkey.cpp/.h   # Hotkey support for manual announcements
+│   ├── ⚙️ preferences.cpp/.h       # Settings UI implementation
+│   └── 📋 working_minimal.cpp      # Minimal working component
+├── 📁 build_scripts/               # Build automation
+│   ├── 🚀 build-matrix-complete.bat # Complete build (recommended)
+│   ├── 🔧 build-working-minimal.bat # Minimal build for testing
+│   └── 📦 build.bat                # Legacy build script
+├── 📁 foobar2000_SDK/             # Foobar2000 SDK (external)
+├── 📁 vcpkg_installed/            # vcpkg dependencies
+└── 📁 output/                     # Build output directory
+```
+
 ## 🛠️ Development Notes
 
 ### Architecture
@@ -184,13 +252,15 @@ Solution: Ensure you're building for x86 (32-bit), not x64
 
 ### Key Classes
 - [`play_callback_matrix`](src/play_callback.cpp) - Handles foobar2000 playback events
+- [`announce_hotkey_command`](src/announce_hotkey.cpp) - Manual track announcement via hotkey
 - [`matrix_preferences_page`](src/preferences.cpp) - Configuration UI
-- [`MatrixClient`](src/matrix_client.cpp) - HTTP client for Matrix API
+- [`simple_matrix_client`](src/simple_matrix_client.cpp) - HTTP client for Matrix API
 - [`matrix_init`](src/main.cpp) - Component initialization
 
 ## 🔮 Future Enhancements
 
-- [ ] **Rich message formatting** - Custom templates with track variables
+- [x] **Rich message formatting** - Custom templates with track variables ✅
+- [x] **Manual announcements** - Hotkey support for on-demand track sharing ✅
 - [ ] **Album art upload** - Send cover art to Matrix rooms
 - [ ] **Multiple room support** - Send to different rooms based on criteria
 - [ ] **Reaction support** - React to currently playing tracks
