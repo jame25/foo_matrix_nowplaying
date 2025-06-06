@@ -19,7 +19,7 @@ A Foobar2000 component that sends "Now Playing" notifications to Matrix chat roo
 
 ## 📋 Prerequisites
 
-- **Foobar2000** (32-bit version)
+- **Foobar2000** (64-bit version)
 - **Visual Studio 2022** with "Desktop development with C++" workload
 - **vcpkg package manager** (for dependencies)
 - **Matrix account** with:
