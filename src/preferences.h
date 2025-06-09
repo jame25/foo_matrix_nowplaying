@@ -2,9 +2,9 @@
 
 #include "../foobar2000_SDK/foobar2000/SDK/foobar2000.h"
 #include "../foobar2000_SDK/foobar2000/SDK/preferences_page.h"  // Base preferences_page interface
+#include "../foobar2000_SDK/foobar2000/SDK/coreDarkMode.h"
 #include "resource.h"
 #include <string>
-#include "../foobar2000_SDK/libPPUI/DarkMode.h"
 
 // Configuration GUIDs
 extern const GUID guid_cfg_matrix_homeserver;
@@ -42,7 +42,7 @@ private:
     bool m_message_format_changed;
     bool m_send_as_action_changed;
     
-    DarkMode::CHooks m_darkMode;
+    fb2k::CCoreDarkModeHooks m_darkMode;
     
     void update_ui();
     void update_ui_with_hwnd(HWND hwnd);
