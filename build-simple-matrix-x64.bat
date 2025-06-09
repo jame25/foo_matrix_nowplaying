@@ -97,18 +97,6 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-echo Compiling darkmode_stub.cpp...
-cl.exe /nologo /c /MD /O2 /W3 /EHsc /std:c++17 ^
-    /D_WINDOWS /DWIN32 /D_WIN64 /D_USRDLL /DNDEBUG /DUNICODE /D_UNICODE ^
-    %INCLUDES% ^
-    /Fo"output_x64\darkmode_stub.obj" ^
-    "src\darkmode_stub.cpp"
-
-if %ERRORLEVEL% NEQ 0 (
-    echo ERROR: darkmode_stub.cpp compilation failed
-    pause
-    exit /b 1
-)
 
 REM Compile resource file if it exists
 if exist "src\resource.rc" (
@@ -137,14 +125,13 @@ link.exe /nologo /DLL /LTCG /MACHINE:X64 ^
     "output_x64\announce_hotkey.obj" ^
     "output_x64\play_callback.obj" ^
     "output_x64\preferences.obj" ^
-    "output_x64\darkmode_stub.obj" ^
     %RESOURCE_FILE% ^
     foobar2000_component_client.lib ^
     foobar2000_SDK.lib ^
     pfc.lib ^
     shared.lib ^
     user32.lib kernel32.lib winmm.lib ole32.lib shell32.lib shlwapi.lib ^
-    wininet.lib advapi32.lib gdi32.lib
+    wininet.lib advapi32.lib gdi32.lib uxtheme.lib
 
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: Linking failed
@@ -171,7 +158,7 @@ echo The x64 component now includes:
 echo - Simple Matrix client using Windows WinINet APIs
 echo - Matrix v3 API support (fixes HTTP 405 error)
 echo - Play callback for track notifications  
-echo - Preferences page for configuration
+echo - Preferences page with foobar2000 core dark mode support
 echo - No external dependencies (curl/jsoncpp)
 echo.
 echo To test: Copy the DLL to your foobar2000 x64 components folder
