@@ -3,10 +3,6 @@
 #include "../foobar2000_SDK/foobar2000/SDK/preferences_page.h"
 #include "../foobar2000_SDK/foobar2000/SDK/foobar2000.h"
 #include <windowsx.h>
-#include <Uxtheme.h>
-#include "../foobar2000_SDK/libPPUI/DarkMode.h"
-
-#pragma comment(lib, "UxTheme.lib")
 
 // Configuration GUIDs
 const GUID guid_cfg_matrix_homeserver = { 0x87654321, 0x4321, 0x8765, { 0x43, 0x21, 0x87, 0x65, 0x43, 0x21, 0x87, 0x65 } };
@@ -36,8 +32,7 @@ static const GUID g_guid_matrix_nowplaying =
 matrix_preferences::matrix_preferences(HWND parent, preferences_page_callback::ptr callback)
     : m_hwnd(NULL), m_callback(callback),
       m_homeserver_changed(false), m_token_changed(false), m_room_id_changed(false),
-      m_enabled_changed(false), m_notify_pause_changed(false), m_notify_stop_changed(false), m_message_format_changed(false), m_send_as_action_changed(false),
-      m_darkMode(DarkMode::QueryUserOption()) {
+      m_enabled_changed(false), m_notify_pause_changed(false), m_notify_stop_changed(false), m_message_format_changed(false), m_send_as_action_changed(false) {
     
     // Create the dialog
     m_hwnd = CreateDialogParam(core_api::get_my_instance(), 
@@ -56,8 +51,7 @@ HWND matrix_preferences::get_wnd() {
 }
 
 t_uint32 matrix_preferences::get_state() {
-    t_uint32 state = preferences_state::resettable;
-    state |= preferences_state::dark_mode_supported;
+    t_uint32 state = preferences_state::resettable | preferences_state::dark_mode_supported;
     if (m_homeserver_changed || m_token_changed || m_room_id_changed || 
         m_enabled_changed || m_notify_pause_changed || m_notify_stop_changed || m_message_format_changed || m_send_as_action_changed) {
         state |= preferences_state::changed;
@@ -121,6 +115,7 @@ void matrix_preferences::update_ui_with_hwnd(HWND hwnd) {
     CheckDlgButton(hwnd, IDC_NOTIFY_STOP, cfg_notify_stop ? BST_CHECKED : BST_UNCHECKED);
     CheckDlgButton(hwnd, IDC_SEND_AS_ACTION, cfg_send_as_action ? BST_CHECKED : BST_UNCHECKED);
     SetDlgItemTextA(hwnd, IDC_MESSAGE_FORMAT, cfg_message_format.get_ptr());
+    
 }
 
 void matrix_preferences::apply_settings() {
@@ -162,8 +157,9 @@ INT_PTR CALLBACK matrix_preferences::dialog_proc(HWND hwnd, UINT msg, WPARAM wpa
         instance = (matrix_preferences*)lparam;
         SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)instance);
         
-        // Initialize controls
+        // Initialize dark mode hooks
         if (instance) {
+            instance->m_darkMode.AddDialogWithControls(hwnd);
             instance->update_ui_with_hwnd(hwnd);
         }
         
