@@ -2,6 +2,8 @@
 
 A Foobar2000 component that sends "Now Playing" notifications to Matrix chat rooms with real-time track updates.
 
+![foo_matrix_nowplaying](https://github.com/user-attachments/assets/500d82e2-065f-4677-afbc-1c8e8975a797)
+
 ## ✨ Features
 
 - 🎵 **Real-time track notifications** - Sends track information when songs change
